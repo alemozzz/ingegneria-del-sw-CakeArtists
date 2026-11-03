@@ -1,0 +1,70 @@
+CREATE TABLE IF NOT EXISTS CLIENTE_REGISTRATO (
+    ID_Cliente INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(50) NOT NULL,
+    Cognome VARCHAR(50) NOT NULL,
+    Telefono VARCHAR(20) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    Indirizzo VARCHAR(150) NOT NULL,
+    Username VARCHAR(50) NOT NULL UNIQUE,
+    Password VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS TORTA (
+    ID_Torta INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(50) NOT NULL UNIQUE,
+    Foto VARCHAR(255) NOT NULL,
+    Descrizione VARCHAR(255) NOT NULL,
+    PrezzoAlKg DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS FARCITURA (
+    ID_Torta INT NOT NULL,
+    Farcitura VARCHAR(50) NOT NULL,
+    PRIMARY KEY (ID_Torta, Farcitura),
+    FOREIGN KEY (ID_Torta) REFERENCES TORTA(ID_Torta) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS CAKE_ARTIST (
+    ID_CakeArtist INT AUTO_INCREMENT PRIMARY KEY,
+    Indirizzo VARCHAR(150) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS RIDER (
+    ID_Rider INT AUTO_INCREMENT PRIMARY KEY,
+    Email VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS ORDINE (
+    ID_Ordine INT AUTO_INCREMENT PRIMARY KEY,
+    DataPrenotazione DATE NOT NULL,
+    Peso INT NOT NULL,
+    Farcitura VARCHAR(50) NOT NULL,
+    Scritta VARCHAR(50),
+    GiornoConsegna DATE NOT NULL,
+    Stato VARCHAR(30) NOT NULL,
+    PrezzoTotale DECIMAL(10, 2) NOT NULL,
+    ID_Cliente INT NOT NULL,
+    ID_Torta INT NOT NULL,
+    ID_CakeArtist INT,
+    FOREIGN KEY (ID_Cliente) REFERENCES CLIENTE_REGISTRATO(ID_Cliente),
+    FOREIGN KEY (ID_Torta) REFERENCES TORTA(ID_Torta),
+    FOREIGN KEY (ID_CakeArtist) REFERENCES CAKE_ARTIST(ID_CakeArtist)
+);
+
+CREATE TABLE IF NOT EXISTS CONSEGNA (
+    ID_Consegna INT AUTO_INCREMENT PRIMARY KEY,
+    LuogoRitiro VARCHAR(150) NOT NULL,
+    Data DATE NOT NULL,
+    OraRitiro TIME NOT NULL,
+    OraConsegnaPrevista TIME,
+    ID_Ordine INT NOT NULL UNIQUE,
+    ID_Rider INT,
+    FOREIGN KEY (ID_Ordine) REFERENCES ORDINE(ID_Ordine),
+    FOREIGN KEY (ID_Rider) REFERENCES RIDER(ID_Rider)
+);
+
+MERGE INTO TORTA (ID_Torta, Nome, Foto, Descrizione, PrezzoAlKg) KEY(Nome) VALUES (1, 'Millefoglie', 'millefoglie.jpg', 'Torta artigianale sfogliata', 25.00);
+MERGE INTO FARCITURA (ID_Torta, Farcitura) KEY(ID_Torta, Farcitura) VALUES (1, 'Chantilly');
+MERGE INTO FARCITURA (ID_Torta, Farcitura) KEY(ID_Torta, Farcitura) VALUES (1, 'Cioccolato');
+MERGE INTO CLIENTE_REGISTRATO (ID_Cliente, Nome, Cognome, Telefono, Email, Indirizzo, Username, Password) KEY(Username) VALUES (1, 'Mario', 'Rossi', '3331234567', 'mariorossi@gmail.com', 'Via Toledo 10', 'mrossi', 'pass123');
