@@ -65,6 +65,21 @@ CREATE TABLE IF NOT EXISTS CONSEGNA (
 );
 
 MERGE INTO TORTA (ID_Torta, Nome, Foto, Descrizione, PrezzoAlKg) KEY(Nome) VALUES (1, 'Millefoglie', 'millefoglie.jpg', 'Torta artigianale sfogliata', 25.00);
+MERGE INTO TORTA (ID_Torta, Nome, Foto, Descrizione, PrezzoAlKg) KEY(Nome) VALUES (2, 'Caprese', 'caprese.jpg', 'Torta tradizionale mandorle e cioccolato', 22.00);
+
 MERGE INTO FARCITURA (ID_Torta, Farcitura) KEY(ID_Torta, Farcitura) VALUES (1, 'Chantilly');
 MERGE INTO FARCITURA (ID_Torta, Farcitura) KEY(ID_Torta, Farcitura) VALUES (1, 'Cioccolato');
+MERGE INTO FARCITURA (ID_Torta, Farcitura) KEY(ID_Torta, Farcitura) VALUES (2, 'Cioccolato');
+MERGE INTO FARCITURA (ID_Torta, Farcitura) KEY(ID_Torta, Farcitura) VALUES (2, 'Crema al pistacchio');
+
 MERGE INTO CLIENTE_REGISTRATO (ID_Cliente, Nome, Cognome, Telefono, Email, Indirizzo, Username, Password) KEY(Username) VALUES (1, 'Mario', 'Rossi', '3331234567', 'mariorossi@gmail.com', 'Via Toledo 10', 'mrossi', 'pass123');
+MERGE INTO CLIENTE_REGISTRATO (ID_Cliente, Nome, Cognome, Telefono, Email, Indirizzo, Username, Password) KEY(Username) VALUES (2, 'Laura', 'Bianchi', '3339876543', 'laurabianchi@gmail.com', 'Corso Umberto 45', 'lbianchi', 'pass456');
+
+MERGE INTO CAKE_ARTIST (ID_CakeArtist, Indirizzo, Email) KEY(Email) VALUES (1, 'Via Chiaia 20', 'anna.pasticciera@cakeartists.it');
+MERGE INTO CAKE_ARTIST (ID_CakeArtist, Indirizzo, Email) KEY(Email) VALUES (2, 'Via Scarlatti 15', 'luigi.dolci@cakeartists.it');
+
+MERGE INTO RIDER (ID_Rider, Email) KEY(Email) VALUES (1, 'marco.rider@cakeartists.it');
+MERGE INTO RIDER (ID_Rider, Email) KEY(Email) VALUES (2, 'sara.rider@cakeartists.it');
+
+MERGE INTO ORDINE (ID_Ordine, DataPrenotazione, Peso, Farcitura, Scritta, GiornoConsegna, Stato, PrezzoTotale, ID_Cliente, ID_Torta, ID_CakeArtist) KEY(ID_Ordine) VALUES (100, '2026-11-01', 2, 'Chantilly', 'Buon Compleanno', '2026-11-10', 'CONFERMATO', 50.00, 1, 1, 1);
+MERGE INTO CONSEGNA (ID_Consegna, LuogoRitiro, Data, OraRitiro, OraConsegnaPrevista, ID_Ordine, ID_Rider) KEY(ID_Ordine) VALUES (100, 'Via Chiaia 20', '2026-11-10', '15:00:00', '16:30:00', 100, 1);
